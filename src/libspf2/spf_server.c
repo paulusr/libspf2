@@ -346,7 +346,7 @@ SPF_server_get_record(SPF_server_t *spf_server,
 						spf_response, spf_recordp);
 
 	/* I am VERY, VERY sorry about the gotos. Shevek. */
-	rr_type = ns_t_spf;
+	rr_type = ns_t_txt;
 retry:
 	rr_txt = SPF_dns_lookup(resolver, domain, rr_type, TRUE);
 
@@ -355,8 +355,8 @@ retry:
 			if (spf_server->debug > 0)
 				SPF_debugf("get_record(%s): HOST_NOT_FOUND", domain);
 			SPF_dns_rr_free(rr_txt);
-			if (rr_type == ns_t_spf) {
-				rr_type = ns_t_txt;
+			if (rr_type == ns_t_txt) {
+				rr_type = ns_t_spf;
 				goto retry;
 			}
 			spf_response->result = SPF_RESULT_NONE;
@@ -369,8 +369,8 @@ retry:
 			if (spf_server->debug > 0)
 				SPF_debugf("get_record(%s): NO_DATA", domain);
 			SPF_dns_rr_free(rr_txt);
-			if (rr_type == ns_t_spf) {
-				rr_type = ns_t_txt;
+			if (rr_type == ns_t_txt) {
+				rr_type = ns_t_spf;
 				goto retry;
 			}
 			spf_response->result = SPF_RESULT_NONE;
@@ -383,8 +383,8 @@ retry:
 			if (spf_server->debug > 0)
 				SPF_debugf("get_record(%s): TRY_AGAIN", domain);
 			SPF_dns_rr_free(rr_txt);
-			if (rr_type == ns_t_spf) {
-				rr_type = ns_t_txt;
+			if (rr_type == ns_t_txt) {
+				rr_type = ns_t_spf;
 				goto retry;
 			}
 			spf_response->result = SPF_RESULT_TEMPERROR;
@@ -397,8 +397,8 @@ retry:
 			if (spf_server->debug > 0)
 				SPF_debugf("get_record(%s): NO_RECOVERY", domain);
 			SPF_dns_rr_free(rr_txt);
-			if (rr_type == ns_t_spf) {
-				rr_type = ns_t_txt;
+			if (rr_type == ns_t_txt) {
+				rr_type = ns_t_spf;
 				goto retry;
 			}
 			spf_response->result = SPF_RESULT_PERMERROR;
@@ -417,8 +417,8 @@ retry:
 				SPF_debugf("get_record(%s): UNKNOWN_ERROR", domain);
 			herrno = rr_txt->herrno;	// Avoid use-after-free
 			SPF_dns_rr_free(rr_txt);
-			if (rr_type == ns_t_spf) {
-				rr_type = ns_t_txt;
+			if (rr_type == ns_t_txt) {
+				rr_type = ns_t_spf;
 				goto retry;
 			}
 			return SPF_response_add_error(spf_response, SPF_E_DNS_ERROR,
@@ -429,8 +429,8 @@ retry:
 
 	if (rr_txt->num_rr == 0) {
 		SPF_dns_rr_free(rr_txt);
-		if (rr_type == ns_t_spf) {
-			rr_type = ns_t_txt;
+		if (rr_type == ns_t_txt) {
+			rr_type = ns_t_spf;
 			goto retry;
 		}
 		return SPF_response_add_error(spf_response, SPF_E_NOT_SPF,
@@ -463,8 +463,8 @@ retry:
 
 	if (num_found == 0) {
 		SPF_dns_rr_free(rr_txt);
-		if (rr_type == ns_t_spf) {
-			rr_type = ns_t_txt;
+		if (rr_type == ns_t_txt) {
+			rr_type = ns_t_spf;
 			goto retry;
 		}
 		spf_response->result = SPF_RESULT_NONE;
