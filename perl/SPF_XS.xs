@@ -79,6 +79,7 @@ BOOT:
 	EXPORT_ERRCODE(SPF_E_MECH_AFTER_ALL);
 	EXPORT_ERRCODE(SPF_E_INCLUDE_RETURNED_NONE);
 	EXPORT_ERRCODE(SPF_E_RECURSIVE);
+	EXPORT_ERRCODE(SPF_E_MULTIPLE_RECORDS);
 
 	EXPORT_INTEGER(SPF_RESULT_INVALID);
 	EXPORT_INTEGER(SPF_RESULT_NEUTRAL);
@@ -345,6 +346,14 @@ DESTROY(response)
 	Mail::SPF_XS::Response	response
 	CODE:
 		SPF_response_free(response);
+
+int
+ecode(response)
+	Mail::SPF_XS::Response	response
+	CODE:
+		RETVAL = SPF_response_result(response);
+	OUTPUT:
+		RETVAL
 
 const char *
 code(response)
